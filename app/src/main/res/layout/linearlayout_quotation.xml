@@ -1,0 +1,132 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/textview_q_cnt"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="#"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="1dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_q_code"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Code"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_q_quantity"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Sys"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_q_curQuantity"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Qty"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/textview_q_cnt1"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text=""
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="1dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_q_name"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Product Name"
+            android:textStyle="bold"
+            android:paddingTop="1dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/textview_q_cnt2"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text=""
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="1dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_q_desc"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:textSize="10sp"
+            android:text="Description"
+            android:textStyle="bold"
+            android:paddingTop="1dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+    </LinearLayout>
+</LinearLayout>

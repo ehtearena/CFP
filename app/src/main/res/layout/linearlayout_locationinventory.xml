@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/textview_location"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Warehouse"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_stock"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Stock"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_ordered"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Ordered"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_committed"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Committed"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_available"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Available"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">Chandarana Supermarkets</string>
+
+    <!-- Strings related to login -->
+    <string name="type_to_search">Type to Search</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <string name="existing_client">Client</string>
+
+    <string name="add_item_by_scanning">Add item</string>
+
+    <string name="title_quotation_lookup">Search Quotation</string>
+    <string name="title_quotation_detail">Quotation Detail</string>
+    <string name="title_activity_main">Chandarana Supermarkets</string>
+    <string name="title_activity_existing_client">Existing client</string>
+    <string name="title_activity_item_lookup">Search an item</string>
+    <string name="title_activity_login">Chandarana Supermarkets</string>
+    <string name="title_activity_new_client">New client</string>
+    <string name="title_activity_quotation_add">Add Items</string>
+
+    <string name="dialog_permission_title">Grant Permissions</string>
+    <string name="dialog_permission_message">This app needs permission to use this feature. You can grant them in app settings.</string>
+    <string name="go_to_settings">GOTO SETTINGS</string>
+
+    <string name="lbl_take_camera_picture">Add by camera</string>
+    <string name="lbl_scan_item">Add by scanning</string>
+    <string name="lbl_choose_from_gallery">Add from gallery</string>
+    <string name="lbl_item_lookup">Search an item</string>
+    <string name="toast_image_intent_null">Image picker option is missing!</string>
+    <string name="lbl_set_itemtitle">Add Item</string>
+    <string name="search_item">Search an item</string>
+    <string name="lbl_btn_lookup">Search</string>
+    <string name="hnt_lookup_item">Search an item</string>
+    <string name="search_quotation">Search quotation</string>
+    <string name="hnt_lookup_quotation">Search quotation</string>
+    <string name="lbl_btn_cancel">Cancel</string>
+    <string name="lbl_existing_client">Existing client</string>
+    <string name="lbl_new_client">New client</string>
+    <string name="lbl_remove_item">Remove item</string>
+    <string name="lbl_edit_item">Edit quantity</string>
+    <string name="lbl_item_action">Item action</string>
+    <string name="lbl_client_title">Add client</string>
+    <string name="lbl_no_client_selected">No client selected</string>
+    <string name="search_client">Search clients</string>
+    <string name="hnt_lookup_client">Search clients</string>
+    <string name="txtV_cardCode">Card Code:</string>
+    <string name="txtV_cardName">*Client Name:</string>
+    <string name="txtV_Email">*Email Address:</string>
+    <string name="txtV_Mobile">*Mobile:</string>
+    <string name="txtV_address">Address (optional)</string>
+    <string name="btn_add_client">Add client</string>
+    <string name="lbl_login">Login</string>
+    <string name="add_quotation">Add quotation</string>
+    <string name="txtV_idnumber">ID Number (optional)</string>
+    <string name="txtV_krapin">KRA PIN (mandatory for companies)</string>
+    <string name="txtV_Tel1">Telephone 1 (optional)</string>
+    <string name="txtV_Tel2">Telephone 2 (optional)</string>
+</resources>

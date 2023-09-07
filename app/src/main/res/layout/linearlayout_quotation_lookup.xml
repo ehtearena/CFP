@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/textview_ql_cnt"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="#"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="1dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_ql_datetime"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Dt"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_ql_mode"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Mode"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_ql_whs1"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Whs1"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/textview_ql_whs2"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Whs2"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="left"/>
+
+
+        <TextView
+            android:id="@+id/textview_ql_item_count"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:text="Itms"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="right"/>
+
+    </LinearLayout>
+</LinearLayout>

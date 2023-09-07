@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#022e21"
+    tools:context="com.evocount.cfl.MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="10dp"
+        android:foregroundGravity="center"
+        app:srcCompat="@drawable/fp_clean" />
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Logged in:"
+        android:textAlignment="center"
+        android:textSize="10sp"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_main"
+        app:layout_anchor="@+id/textViewName"
+        app:layout_anchorGravity="bottom|center" />
+
+    <FrameLayout
+        android:id="@+id/quoteframe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/send_button"
+        android:layout_gravity="start|bottom"
+        android:layout_toStartOf="@+id/send_button"
+        android:layout_toLeftOf="@+id/send_button">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/quotebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="?attr/colorPrimary"
+            app:rippleColor="#ffffff"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <TextView
+            android:id="@+id/quotenumber"
+            style="@android:style/Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/frameLayout"
+            android:layout_gravity="right"
+            android:layout_margin="10dp"
+            android:layout_toStartOf="@+id/frameLayout"
+            android:layout_toLeftOf="@+id/frameLayout"
+            android:elevation="7dp"
+            android:padding="2dp"
+            android:text="0"
+            android:textColor="#FF0000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
