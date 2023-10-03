@@ -48,11 +48,14 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import android.speech.tts.TextToSpeech;
@@ -135,11 +138,50 @@ public class QuotationAddActivity extends CommonActivity implements View.OnClick
     @Override
     public void onBackPressed()
     {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        stopRepeatingTask();
-        finish();
-    }
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuotationAddActivity.this);
+        builder.setTitle("Save and exit?");
+
+        final TextView tx = new TextView(QuotationAddActivity.this);
+        tx.setText("This will save current stock take and exit to the home screen. Please enter your name if you wish to exit.");
+        final EditText input = new EditText(QuotationAddActivity.this);
+
+        LinearLayout layout = new LinearLayout(QuotationAddActivity.this);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(60, 0, 60, 0);
+
+        layout.addView(tx);
+        layout.addView(input);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Save and exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+                    stopRepeatingTask();
+
+                    saveQuotation("", false, input.getText().toString());
+
+                    finish();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+   }
 
     @Override
     protected void onResume()
@@ -771,6 +813,20 @@ public class QuotationAddActivity extends CommonActivity implements View.OnClick
 
     }
 
+    public HashMap<String, Float> sortbykey(HashMap<String, Float> map)
+    {
+        TreeMap<String, Float> sorted = new TreeMap<>();
+        sorted.putAll(map);
+
+        HashMap<String, Float> newMap = new HashMap<>();
+        for (String k: sorted.keySet())
+        {
+            newMap.put(k, sorted.get(k));
+        }
+
+        return newMap;
+    }
+
     private void saveQuotation(String inputString, boolean closec, String username) throws IOException {
 
 
@@ -782,173 +838,235 @@ public class QuotationAddActivity extends CommonActivity implements View.OnClick
         }
         else
         {
-            p.setMessage("Saving item data.");
 
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(QuotationAddActivity.this);
+            builder.setTitle("Summary of items");
 
-            Long qDate = quotationsAdapter.quotation.datetime;
-            String data = "";
-            int i = 0;
-            for (LineItem q: quotationsAdapter.quotation.lineItems)
-            {
-   //             if (q.submitted == 1) continue;
-                if (!data.equals("")) data += ",";
-                if (((MyApplication)getApplication()).mode.equals("stock"))
-                {
-                    data += q.id + "@" + q.code + "_" + q.selectedLot + "@" + q.qtychange + "@" + q.datetime + "@" + q.curQuantity + "V" + q.quantity + "@" + username + "@" + q.comments + "@" + q.image + "@" + q.bin;
-                }
-                else
-                {
-                    data += q.id + q.code +  "_" + q.selectedLot + "@" + q.curQuantity + "@" + username + "@"  + q.comments + "@" + q.image + "@" + q.bin;
-                }
+            LinearLayout layout2 = new LinearLayout(QuotationAddActivity.this);
+            layout2.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            layout2.setOrientation(LinearLayout.VERTICAL);
+            layout2.setPadding(50, 30, 50, 0);
 
-                i++;
+            final TextView tv1 = new TextView(QuotationAddActivity.this);
+
+            HashMap<String, Float> totals = new HashMap<>();
+            for (LineItem q: quotationsAdapter.quotation.lineItems) {
+                if (!totals.containsKey(q.code)) totals.put(q.code, 0F);
+                Float curQty = totals.get(q.code);
+                totals.put(q.code, curQty+ q.curQuantity);
             }
 
-            ((MyApplication)getApplication()).totalsaved = i;
-
-            SharedPreferences prf = getSharedPreferences("user_details",MODE_PRIVATE);
-            String seriesName = prf.getString("seriesName" , null);
-            int salesPerson = prf.getInt("salesPerson", -1);
-            String inventorygl = prf.getString("inventorygl" , null);
-            String whdata = prf.getString("whdata" , null);
-            String loggedName = prf.getString("loggedName", "");
-
-            String sentQ = "false";
-            if (quotationsAdapter.quotation.sent)
+            String txt = "";
+            Integer count = 0;
+            HashMap<String, Float> sorted = sortbykey(totals);
+            for (String k : sorted.keySet())
             {
-                sentQ = "true";
+                count++;
+                txt += count + ". " +  sorted.get(k) + "\n";
             }
 
-            String whsentry = "";
-            String related_to = ";related_to:";
-            if (((MyApplication)getApplication()).mode.equals("stock"))
-            {
-                whsentry += "warehouse:" + ((MyApplication) getApplication()).selectedWarehouse + ";secondwarehouse:" + ((MyApplication) getApplication()).secondWarehouse + ";";
-                whsentry += "supplier:" + ((MyApplication) getApplication()).selectedSupplier + ";";
-                whsentry += "takerecord:" + quotationsAdapter.quotation.stockTakeId + ";";
-            }
+            tv1.setText(txt);
 
-            if (((MyApplication)getApplication()).mode.equals("in"))
-            {
-                related_to = ";related_to:" + quotationsAdapter.quotation.related_to;
-                whsentry = "warehouse:" + ((MyApplication) getApplication()).selectedWarehouse + ";secondwarehouse:" + quotationsAdapter.quotation.warehouseOneIntent + ";";
-                whsentry += "warehousei:" + quotationsAdapter.quotation.warehouseOneIntent + ";secondwarehousei:" + quotationsAdapter.quotation.warehouseTwoIntent + ";";
-            }
-            if (((MyApplication)getApplication()).mode.equals("out"))
-            {
-                whsentry = "warehouse:" + ((MyApplication) getApplication()).selectedWarehouse + ";secondwarehouse:" + ((MyApplication) getApplication()).secondWarehouse + ";";
-                whsentry += "warehousei:" + quotationsAdapter.quotation.warehouseOneIntent + ";secondwarehousei:" + quotationsAdapter.quotation.warehouseTwoIntent + ";";
-            }
+            layout2.addView(tv1);
 
-            whsentry += "category:" + ((MyApplication) getApplication()).categorychosen +";";
+            builder.setView(layout2);
 
-            String dataf = ";startDateTime:" + quotationsAdapter.quotation.datetime + ";sent:"+ sentQ +";seriesName:"+seriesName+";"+whsentry+"tabletUser:"+loggedName+";salesEmployee:"+String.valueOf(salesPerson)+";remarks:" + inputString + ";vehicle:" + quotationsAdapter.quotation.vehicletrack + ";inventorygl:" + inventorygl + ";whdata:"+ whdata + ";approvedby:;taketype:" + quotationsAdapter.quotation.stockTakeType;
+            builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
 
-            p.show();
-
-            String request = "10|mode:" + ((MyApplication)getApplication()).mode + ";items:" + data + dataf + "|<EOF>" ;
-
-            ((MyApplication)getApplication()).setResponse("");
-            ((MyApplication)getApplication()).setRequest(request);
-            ((MyApplication)getApplication()).startCT();
-
-            Timer t = new Timer();
-            t.scheduleAtFixedRate(new TimerTask(){
                 @Override
-                public void run(){
-                    if (((MyApplication)getApplication()).getResponse().equals("error"))
-                    {
-                        t.cancel();
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
 
-                        runOnUiThread(new Runnable() {
+                        p.setMessage("Saving item data.");
 
+
+                        Long qDate = quotationsAdapter.quotation.datetime;
+                        String data = "";
+                        int i = 0;
+                        for (LineItem q: quotationsAdapter.quotation.lineItems)
+                        {
+                            //             if (q.submitted == 1) continue;
+                            if (!data.equals("")) data += ",";
+                            if (((MyApplication)getApplication()).mode.equals("stock"))
+                            {
+                                data += q.id + "@" + q.code + "_" + q.selectedLot + "@" + q.qtychange + "@" + q.datetime + "@" + q.curQuantity + "V" + q.quantity + "@" + username + "@" + q.comments + "@" + q.image + "@" + q.bin;
+                            }
+                            else
+                            {
+                                data += q.id + q.code +  "_" + q.selectedLot + "@" + q.curQuantity + "@" + username + "@"  + q.comments + "@" + q.image + "@" + q.bin;
+                            }
+
+                            i++;
+                        }
+
+                        ((MyApplication)getApplication()).totalsaved = i;
+
+                        SharedPreferences prf = getSharedPreferences("user_details",MODE_PRIVATE);
+                        String seriesName = prf.getString("seriesName" , null);
+                        int salesPerson = prf.getInt("salesPerson", -1);
+                        String inventorygl = prf.getString("inventorygl" , null);
+                        String whdata = prf.getString("whdata" , null);
+                        String loggedName = prf.getString("loggedName", "");
+
+                        String sentQ = "false";
+                        if (quotationsAdapter.quotation.sent)
+                        {
+                            sentQ = "true";
+                        }
+
+                        String whsentry = "";
+                        String related_to = ";related_to:";
+                        if (((MyApplication)getApplication()).mode.equals("stock"))
+                        {
+                            whsentry += "warehouse:" + ((MyApplication) getApplication()).selectedWarehouse + ";secondwarehouse:" + ((MyApplication) getApplication()).secondWarehouse + ";";
+                            whsentry += "supplier:" + ((MyApplication) getApplication()).selectedSupplier + ";";
+                            whsentry += "takerecord:" + quotationsAdapter.quotation.stockTakeId + ";";
+                        }
+
+                        if (((MyApplication)getApplication()).mode.equals("in"))
+                        {
+                            related_to = ";related_to:" + quotationsAdapter.quotation.related_to;
+                            whsentry = "warehouse:" + ((MyApplication) getApplication()).selectedWarehouse + ";secondwarehouse:" + quotationsAdapter.quotation.warehouseOneIntent + ";";
+                            whsentry += "warehousei:" + quotationsAdapter.quotation.warehouseOneIntent + ";secondwarehousei:" + quotationsAdapter.quotation.warehouseTwoIntent + ";";
+                        }
+                        if (((MyApplication)getApplication()).mode.equals("out"))
+                        {
+                            whsentry = "warehouse:" + ((MyApplication) getApplication()).selectedWarehouse + ";secondwarehouse:" + ((MyApplication) getApplication()).secondWarehouse + ";";
+                            whsentry += "warehousei:" + quotationsAdapter.quotation.warehouseOneIntent + ";secondwarehousei:" + quotationsAdapter.quotation.warehouseTwoIntent + ";";
+                        }
+
+                        whsentry += "category:" + ((MyApplication) getApplication()).categorychosen +";";
+
+                        String dataf = ";startDateTime:" + quotationsAdapter.quotation.datetime + ";sent:"+ sentQ +";seriesName:"+seriesName+";"+whsentry+"tabletUser:"+loggedName+";salesEmployee:"+String.valueOf(salesPerson)+";remarks:" + inputString + ";vehicle:" + quotationsAdapter.quotation.vehicletrack + ";inventorygl:" + inventorygl + ";whdata:"+ whdata + ";approvedby:;taketype:" + quotationsAdapter.quotation.stockTakeType;
+
+                        p.show();
+
+                        String request = "10|mode:" + ((MyApplication)getApplication()).mode + ";items:" + data + dataf + "|<EOF>" ;
+
+                        ((MyApplication)getApplication()).setResponse("");
+                        ((MyApplication)getApplication()).setRequest(request);
+                        ((MyApplication)getApplication()).startCT();
+
+                        Timer t = new Timer();
+                        t.scheduleAtFixedRate(new TimerTask(){
                             @Override
-                            public void run() {
+                            public void run(){
+                                if (((MyApplication)getApplication()).getResponse().equals("error"))
+                                {
+                                    t.cancel();
 
-                                try {
+                                    runOnUiThread(new Runnable() {
 
-                                    p.dismiss();
-
-                                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(QuotationAddActivity.this);
-                                    builder.setTitle("Please check connectivity and try again.");
-                                    builder.setNeutralButton("Okay", new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                        public void run() {
+
+                                            try {
+
+                                                p.dismiss();
+
+                                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(QuotationAddActivity.this);
+                                                builder.setTitle("Please check connectivity and try again.");
+                                                builder.setNeutralButton("Okay", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                    }
+                                                });
+
+                                                builder.show();
+                                            } catch (Exception ep) {
+                                                ep.printStackTrace();
+                                            }
                                         }
                                     });
-
-                                    builder.show();
-                                } catch (Exception ep) {
-                                    ep.printStackTrace();
-                                }
-                            }
-                        });
-                    } else
-                    if (!((MyApplication)getApplication()).getResponse().equals("")) //Save Quotation
-                    {
-                        t.cancel();
-
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run()
-                            {
-                                try
+                                } else
+                                if (!((MyApplication)getApplication()).getResponse().equals("")) //Save Quotation
                                 {
-                                    p.dismiss();
-                                    if (((MyApplication)getApplication()).getResponse().contains("Success"))
-                                    {
-                                        for (LineItem q: quotationsAdapter.quotation.lineItems) {
-                                            q.submitted = 1;
-                                        }
+                                    t.cancel();
 
-                                        String resp = ((MyApplication)getApplication()).getResponse();
+                                    runOnUiThread(new Runnable() {
 
-                                        String[] itmdata = resp.split("\\|");
-                                        for (String sitm: itmdata[1].split(";"))
+                                        @Override
+                                        public void run()
                                         {
-                                            String[] prts = sitm.split(":");
-                                            String itemcode = prts[0];
-                                            String itemname = prts[1];
-                                            int qty = Integer.parseInt(prts[2]);
-                                            for (LineItem q: quotationsAdapter.quotation.lineItems) {
-                                                if (itemcode.equals(q.code))
+                                            try
+                                            {
+                                                p.dismiss();
+                                                if (((MyApplication)getApplication()).getResponse().contains("Success"))
                                                 {
-                                                    if (q.quantity == 0) q.quantity = qty;
-                                                    if (q.name.equals(""))  q.name = itemname;
+                                                    for (LineItem q: quotationsAdapter.quotation.lineItems) {
+                                                        q.submitted = 1;
+                                                    }
+
+                                                    String resp = ((MyApplication)getApplication()).getResponse();
+
+                                                    String[] itmdata = resp.split("\\|");
+                                                    for (String sitm: itmdata[1].split(";"))
+                                                    {
+                                                        String[] prts = sitm.split(":");
+                                                        String itemcode = prts[0];
+                                                        String itemname = prts[1];
+                                                        int qty = Integer.parseInt(prts[2]);
+                                                        for (LineItem q: quotationsAdapter.quotation.lineItems) {
+                                                            if (itemcode.equals(q.code))
+                                                            {
+                                                                if (q.quantity == 0) q.quantity = qty;
+                                                                if (q.name.equals(""))  q.name = itemname;
+                                                            }
+                                                        }
+
+                                                    }
+                                                    quotationsAdapter.notifyDataSetChanged();
+                                                    String err = ((MyApplication)getApplication()).getResponse() + "; " + ((MyApplication)getApplication()).totalsaved + " items";
+                                                    Toast.makeText(QuotationAddActivity.this, itmdata[0], Toast.LENGTH_LONG).show();
+
+                                                    quotationsAdapter.quotation.sent = true;
+
+                                                    try {
+                                                        ((MyApplication)getApplication()).removeSerializedQuotation(quotationsAdapter.quotation);
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    String err = ((MyApplication)getApplication()).getResponse();
+                                                    Toast.makeText(QuotationAddActivity.this, err, Toast.LENGTH_LONG).show();
                                                 }
                                             }
-
+                                            catch (Exception e)
+                                            {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                        quotationsAdapter.notifyDataSetChanged();
-                                        String err = ((MyApplication)getApplication()).getResponse() + "; " + ((MyApplication)getApplication()).totalsaved + " items";
-                                        Toast.makeText(QuotationAddActivity.this, itmdata[0], Toast.LENGTH_LONG).show();
-
-                                        quotationsAdapter.quotation.sent = true;
-
-                                        try {
-                                            ((MyApplication)getApplication()).removeSerializedQuotation(quotationsAdapter.quotation);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        finish();
-                                    }
-                                    else
-                                    {
-                                        String err = ((MyApplication)getApplication()).getResponse();
-                                        Toast.makeText(QuotationAddActivity.this, err, Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    e.printStackTrace();
+                                    });
                                 }
                             }
-                        });
+                        },500,1000);
+
+
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
-            },500,1000);
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            builder.show();
+
+
+
+
+
 
         }
 
@@ -1406,6 +1524,7 @@ public class QuotationAddActivity extends CommonActivity implements View.OnClick
     {
 
         boolean found = false;
+        /*
         for (LineItem l : quotationsAdapter.quotation.lineItems)
         {
             if (l.code.equals(li.code))
@@ -1416,7 +1535,7 @@ public class QuotationAddActivity extends CommonActivity implements View.OnClick
                 break;
             }
         }
-
+        */
         if (!found)
         {
             li.curQuantity = 1;
